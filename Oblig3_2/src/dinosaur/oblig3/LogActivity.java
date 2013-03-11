@@ -28,7 +28,7 @@ public class LogActivity extends ListActivity {
 		String category = getResources().getStringArray(R.array.categories)[categoryIndex];
 		
 		setTitle("Logg - " + category);
-		
+	    
 		// HENT SHITN
 		ArrayList<String> temp = new ArrayList<String>();
 		temp.add("Sendt SMS,11.02.2011 20:33");
