@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Oblig 3.1</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+
+    <string-array name="categories">
+        <item>Telefoni</item>
+        <item>Nettverk</item>
+        <item>Pølsefest</item>
+    </string-array>
+
+    <string name="title_activity_option_list">OptionListActivity</string>
+
+</resources>
