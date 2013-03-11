@@ -2,13 +2,36 @@
 <resources>
 
     <string name="app_name">Oblig 3.1</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
 
     <string-array name="categories">
         <item>Telefoni</item>
         <item>Nettverk</item>
-        <item>Pølsefest</item>
+        <item>Diverse</item>
+    </string-array>
+    
+    <string-array name="category_telephony">
+        <item>Fullt SIM-kort</item>
+        <item>SMS mottatt</item>
+        <item>SMS ikke sendt</item>
+        <item>Ny utgående samtale</item>
+        <item>Ny beskjed på telefonsvarer</item>
+    </string-array>
+    
+    <string-array name="category_network">
+        <item>Wifi-status endret</item>
+        <item>Wifi-ID endret</item>
+        <item>Wifi-tilkobling endret</item>
+        <item>Bluetooth endret</item>
+        <item>Bluetooth funnet</item>
+    </string-array>
+    
+    <string-array name="category_div">
+        <item>Headset inn/ut</item>
+        <item>Oppstart ferdig</item>
+        <item>Flymodus</item>
+        <item>Bakgrunn endret</item>
+        <item>Batteri OK</item>
     </string-array>
 
     <string name="title_activity_option_list">OptionListActivity</string>
