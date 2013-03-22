@@ -60,6 +60,10 @@
                 
             </intent-filter>
         </receiver>
+        <provider 
+            android:authorities="dinosaur.oblig3_1.DatabaseProvider"
+            android:multiprocess="true"
+            android:name="dinosaur.oblig3_1.DatabaseProvider"></provider>
     </application>
 
 </manifest>
