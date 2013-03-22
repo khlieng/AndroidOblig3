@@ -37,7 +37,7 @@ public class Reciver extends BroadcastReceiver {
 			Toast.makeText(context, "Sim card full", Toast.LENGTH_SHORT).show();
 		}
 		else if(intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")){
-			Toast.makeText(context, "SMS Recived", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "SMS Recived capture", Toast.LENGTH_SHORT).show();
 		}
 		else if(intent.getAction().equals("android.provider.Telephony.SMS_REJECTED")){
 			Toast.makeText(context, "SMS Rejected", Toast.LENGTH_SHORT).show();
@@ -59,7 +59,7 @@ public class Reciver extends BroadcastReceiver {
 			Toast.makeText(context, "Boot Completed", Toast.LENGTH_SHORT).show();
 		}
 		else if(intent.getAction().equals("android.intent.action.AIRPLANE_MODE")){
-			Toast.makeText(context, "Airplane mode", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "Airplane mode changed", Toast.LENGTH_SHORT).show();
 		}
 		else if(intent.getAction().equals("android.intent.action.WALLPAPER_CHANGED")){
 			Toast.makeText(context, "Wallpaper changed", Toast.LENGTH_SHORT).show();
