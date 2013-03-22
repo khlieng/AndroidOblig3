@@ -38,9 +38,9 @@ public class DatabaseProvider extends ContentProvider {
 	}
 
 	@Override
-	public Uri insert(Uri arg0, ContentValues arg1) {
-		// TODO Auto-generated method stub
-		return null;
+	public Uri insert(Uri uri, ContentValues values) {
+		db.getWritableDatabase().insert("log", "", values);
+		return uri;
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class DatabaseProvider extends ContentProvider {
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 		queryBuilder.setTables("log");
 		if (uriMatcher.match(uri) == LOG_ENTRY_ID) {
-			queryBuilder.appendWhere("id=" + uri.getLastPathSegment());
+			queryBuilder.appendWhere("_id=" + uri.getLastPathSegment());
 		}
 		Cursor cursor = queryBuilder.query(db.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
 		cursor.setNotificationUri(getContext().getContentResolver(), uri);

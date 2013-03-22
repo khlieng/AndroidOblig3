@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 import dinosaur.oblig3.R;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LogActivity extends ListActivity {
 
@@ -29,7 +32,18 @@ public class LogActivity extends ListActivity {
 		
 		setTitle("Logg - " + category);
 	    
-		// HENT SHITN
+		// Permission Denied :(
+		String[] projection = { "_id", "content" };
+		Cursor result = getContentResolver().query(Uri.parse("content://dinosaur.oblig3_1.DatabaseProvider/log"), projection, null, null, null);
+		if (result == null) {
+			Toast.makeText(this, "result = null :(", Toast.LENGTH_LONG).show();			
+		}
+		else {
+			result.moveToFirst();
+			Toast.makeText(this, ""+result.getString(1), Toast.LENGTH_LONG).show();
+		}
+		//
+				
 		ArrayList<String> temp = new ArrayList<String>();
 		temp.add("Sendt SMS,11.02.2011 20:33");
 		temp.add("Ringt mordi,11.02.2011 21:37");

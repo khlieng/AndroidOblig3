@@ -3,11 +3,14 @@ package dinosaur.oblig3_1;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends ListActivity {
 	public static final String CATEGORY_INDEX = "dinosaur.oblig3_1.MainActivity.CATEGORY_INDEX";
@@ -16,6 +19,26 @@ public class MainActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// DATABASETEST
+		//
+		ContentValues values = new ContentValues();
+		values.put("content", "test");
+		values.put("datetime", "idag");
+		values.put("category", "Telefoni");
+		getContentResolver().insert(DatabaseProvider.CONTENT_URI, values);
+		
+		String[] projection = { "_id", "content" };
+		Cursor result = getContentResolver().query(DatabaseProvider.CONTENT_URI, projection, null, null, null);
+		if (result == null) {
+			Toast.makeText(this, "result = null :(", Toast.LENGTH_LONG).show();			
+		}
+		else {
+			result.moveToFirst();
+			Toast.makeText(this, ""+result.getString(1), Toast.LENGTH_LONG).show();
+		}
+		//
+		//
 		
 		this.setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, 
 				getResources().getStringArray(R.array.categories)));
