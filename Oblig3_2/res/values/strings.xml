@@ -7,7 +7,7 @@
     <string-array name="categories">
         <item>Telefoni</item>
         <item>Nettverk</item>
-        <item>Pølsefest</item>
+        <item>Diverse</item>
     </string-array>
 
     <string name="hello_world">Hello world!</string>

@@ -62,7 +62,7 @@ public class DatabaseProvider extends ContentProvider {
 			break;
 			
 		case LOG_CATEGORY:
-			queryBuilder.appendWhere("category=" + uri.getLastPathSegment());
+			queryBuilder.appendWhere("category=\"" + uri.getLastPathSegment() +"\"");
 			break;
 		}
 		Cursor cursor = queryBuilder.query(db.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);

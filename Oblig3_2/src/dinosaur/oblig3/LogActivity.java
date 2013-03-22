@@ -32,22 +32,18 @@ public class LogActivity extends ListActivity {
 		
 		setTitle("Logg - " + category);
 	    
-		// Permission Denied :(
-		String[] projection = { "_id", "content" };
-		Cursor result = getContentResolver().query(Uri.parse("content://dinosaur.oblig3_1.DatabaseProvider/log"), projection, null, null, null);
-		if (result == null) {
-			Toast.makeText(this, "result = null :(", Toast.LENGTH_LONG).show();			
-		}
-		else {
+		String[] projection = { "_id", "content", "details", "datetime" };
+		Cursor result = getContentResolver().query(Uri.parse("content://dinosaur.oblig3_1.DatabaseProvider/log/category/" + category), projection, null, null, null);
+
+		ArrayList<Entry> entries = new ArrayList<Entry>();
+		if (result.getCount() > 0) {
 			result.moveToFirst();
-			Toast.makeText(this, ""+result.getString(1), Toast.LENGTH_LONG).show();
+			do {
+				entries.add(new Entry(result.getString(1), result.getString(2), result.getString(3)));
+			} while (result.moveToNext());
 		}
-		//
 		
-		ArrayList<String> temp = new ArrayList<String>();
-		temp.add("Sendt SMS,11.02.2011 20:33");
-		temp.add("Ringt mordi,11.02.2011 21:37");
-		getListView().setAdapter(new LogAdapter(this, R.layout.row_log, temp));
+		getListView().setAdapter(new LogAdapter(this, R.layout.row_log, entries));
 	}
 
 	@Override
@@ -55,11 +51,27 @@ public class LogActivity extends ListActivity {
 		getMenuInflater().inflate(R.menu.activity_log, menu);
 		return true;
 	}
-
-	private class LogAdapter extends ArrayAdapter<String> {
-		private ArrayList<String> entries;
+	
+	private class Entry {
+		private String content;
+		private String details;
+		private String datetime;
 		
-		public LogAdapter(Context context, int textViewResourceId, ArrayList<String> entries) {
+		public Entry(String content, String details, String datetime) {
+			this.content = content;
+			this.details = details;
+			this.datetime = datetime;
+		}
+		
+		public String getContent() { return content; }
+		public String getDetails() { return details; }
+		public String getDatetime() { return datetime; }
+	}
+
+	private class LogAdapter extends ArrayAdapter<Entry> {
+		private ArrayList<Entry> entries;
+		
+		public LogAdapter(Context context, int textViewResourceId, ArrayList<Entry> entries) {
 			super(context, textViewResourceId, entries);
 			this.entries = entries;
 		}
@@ -70,12 +82,12 @@ public class LogActivity extends ListActivity {
             TextView dt = (TextView)v.findViewById(R.id.datetime);
             dt.setFocusable(false);
             dt.setFocusableInTouchMode(false);
-            dt.setText(entries.get(position).split(",")[1]);
+            dt.setText(entries.get(position).getDatetime());
             
             TextView status = (TextView)v.findViewById(R.id.status);
             status.setFocusable(false);
             status.setFocusableInTouchMode(false);
-            status.setText(entries.get(position).split(",")[0]);
+            status.setText(entries.get(position).getContent());
             
             return v;
 		}

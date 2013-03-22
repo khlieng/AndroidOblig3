@@ -23,8 +23,8 @@ public class MainActivity extends ListActivity {
 		// DATABASETEST
 		//
 		ContentValues values = new ContentValues();
-		values.put("content", "test");
-		values.put("datetime", "idag");
+		values.put("content", "jadda");
+		values.put("datetime", "YYYY-MM-DD HH:MM:SS");
 		values.put("category", "Telefoni");
 		getContentResolver().insert(DatabaseProvider.CONTENT_URI, values);
 		
