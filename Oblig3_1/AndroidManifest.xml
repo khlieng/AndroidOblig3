@@ -7,7 +7,19 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="17" />
+    
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.CALL_PHONE" />
+	<uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+	
+	<uses-permission android:name="android.permission.BLUETOOTH" />
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
+
+	android.permission.BLUETOOTH_ADMIN
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -26,6 +38,28 @@
             android:name="dinosaur.oblig3_1.OptionListActivity"
             android:label="@string/title_activity_option_list" >
         </activity>
+        <receiver android:name=".Reciver">
+            <intent-filter>
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+                
+                <action android:name="android.net.wifi.STATE_CHANGE"/>
+                <action android:name="android.net.wifi.NETWORK_IDS_CHANGED"/>
+                <action android:name="android.net.wifi.supplicant.CONNECTION_CHANGE"/>
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED"/>
+                <action android:name="android.bluetooth.device.action.FOUND"/>
+                <action android:name="android.provider.Telephony.SIM_FULL"/>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+                <action android:name="android.provider.Telephony.SMS_REJECTED"/>
+                <action android:name="android.intent.action.NEW_VOICEMAIL"/>
+                <action android:name="android.intent.action.HEADSET_PLUG"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.WALLPAPER_CHANGED"/>
+                <action android:name="android.intent.action.BATTERY_OKAY"/>
+                
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
