@@ -43,7 +43,7 @@ public class LogActivity extends ListActivity {
 			Toast.makeText(this, ""+result.getString(1), Toast.LENGTH_LONG).show();
 		}
 		//
-				
+		
 		ArrayList<String> temp = new ArrayList<String>();
 		temp.add("Sendt SMS,11.02.2011 20:33");
 		temp.add("Ringt mordi,11.02.2011 21:37");

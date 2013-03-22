@@ -14,6 +14,7 @@ public class DatabaseProvider extends ContentProvider {
 	private static final String AUTHORITY = "dinosaur.oblig3_1.DatabaseProvider";
 	public static final int LOG = 1;
 	public static final int LOG_ENTRY_ID = 2;
+	public static final int LOG_CATEGORY = 3;
 	private static final String LOG_BASE_PATH = "log";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + LOG_BASE_PATH);
 	public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/oblig3";
@@ -22,7 +23,8 @@ public class DatabaseProvider extends ContentProvider {
 	private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	static {
 		uriMatcher.addURI(AUTHORITY, LOG_BASE_PATH, LOG);
-		uriMatcher.addURI(AUTHORITY, LOG_BASE_PATH + "/#", + LOG_ENTRY_ID);
+		uriMatcher.addURI(AUTHORITY, LOG_BASE_PATH + "/#", LOG_ENTRY_ID);
+		uriMatcher.addURI(AUTHORITY, LOG_BASE_PATH + "/category/*", LOG_CATEGORY);
 	}
 
 	@Override
@@ -53,8 +55,15 @@ public class DatabaseProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 		queryBuilder.setTables("log");
-		if (uriMatcher.match(uri) == LOG_ENTRY_ID) {
+		int uriType = uriMatcher.match(uri);
+		switch (uriType) {
+		case LOG_ENTRY_ID:
 			queryBuilder.appendWhere("_id=" + uri.getLastPathSegment());
+			break;
+			
+		case LOG_CATEGORY:
+			queryBuilder.appendWhere("category=" + uri.getLastPathSegment());
+			break;
 		}
 		Cursor cursor = queryBuilder.query(db.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
 		cursor.setNotificationUri(getContext().getContentResolver(), uri);

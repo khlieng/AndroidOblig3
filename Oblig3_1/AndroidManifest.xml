@@ -63,6 +63,8 @@
         <provider 
             android:authorities="dinosaur.oblig3_1.DatabaseProvider"
             android:multiprocess="true"
+            android:exported="true"
+            android:grantUriPermissions="true"
             android:name="dinosaur.oblig3_1.DatabaseProvider"></provider>
     </application>
 
