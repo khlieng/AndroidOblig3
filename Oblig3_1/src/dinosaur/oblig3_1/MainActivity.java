@@ -1,10 +1,12 @@
 package dinosaur.oblig3_1;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.view.Menu;
 import android.view.View;
@@ -22,6 +24,7 @@ public class MainActivity extends ListActivity {
 		
 		// DATABASETEST
 		//
+		
 		ContentValues values = new ContentValues();
 		values.put("content", "jadda");
 		values.put("datetime", "YYYY-MM-DD HH:MM:SS");
