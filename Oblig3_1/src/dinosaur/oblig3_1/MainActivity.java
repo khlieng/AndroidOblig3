@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 public class MainActivity extends ListActivity {
 	public static final String CATEGORY_INDEX = "dinosaur.oblig3_1.MainActivity.CATEGORY_INDEX";
-	
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

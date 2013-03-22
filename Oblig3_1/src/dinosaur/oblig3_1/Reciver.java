@@ -7,6 +7,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.os.Handler;
 import android.telephony.SmsManager;
 import android.telephony.gsm.SmsMessage;
 import android.text.method.DateTimeKeyListener;
@@ -104,6 +106,6 @@ public class Reciver extends BroadcastReceiver {
 		 values.put("category", catagory);
 		  
 		 context.getContentResolver().insert(DatabaseProvider.CONTENT_URI, values);
+		 context.getContentResolver().notifyChange(DatabaseProvider.CONTENT_URI, null);
 	}
-
 }//end Reciver.class

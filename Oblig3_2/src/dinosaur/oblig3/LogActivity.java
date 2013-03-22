@@ -6,10 +6,12 @@ import dinosaur.oblig3.R;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.view.Menu;
 import android.view.View;
@@ -21,6 +23,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class LogActivity extends ListActivity {
+	private String currentCategory;
+	
+	private class DatabaseObserver extends ContentObserver {
+		public DatabaseObserver(Handler handler) {
+			super(handler);
+		}
+		
+		public void onChange(boolean selfChange) {
+			getLog(currentCategory);
+			getListView().setSelection(getListView().getAdapter().getCount() - 1);
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +42,22 @@ public class LogActivity extends ListActivity {
 		setContentView(R.layout.activity_log);
 		
 		int categoryIndex = getIntent().getExtras().getInt(MainActivity.CATEGORY_INDEX);
-		String category = getResources().getStringArray(R.array.categories)[categoryIndex];
+		currentCategory = getResources().getStringArray(R.array.categories)[categoryIndex];
 		
-		setTitle("Logg - " + category);
+		setTitle("Logg - " + currentCategory);
+		
+		getLog(currentCategory);
 	    
+		getContentResolver().registerContentObserver(Uri.parse("content://dinosaur.oblig3_1.DatabaseProvider/log"), false, new DatabaseObserver(new Handler()));		
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.activity_log, menu);
+		return true;
+	}
+	
+	private void getLog(String category) {
 		String[] projection = { "_id", "content", "details", "datetime" };
 		Cursor result = getContentResolver().query(Uri.parse("content://dinosaur.oblig3_1.DatabaseProvider/log/category/" + category), projection, null, null, null);
 
@@ -44,12 +70,6 @@ public class LogActivity extends ListActivity {
 		}
 		
 		getListView().setAdapter(new LogAdapter(this, R.layout.row_log, entries));
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_log, menu);
-		return true;
 	}
 	
 	private class Entry {
