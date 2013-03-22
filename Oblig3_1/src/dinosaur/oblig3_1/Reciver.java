@@ -1,8 +1,10 @@
 package dinosaur.oblig3_1;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 public class Reciver extends BroadcastReceiver {
@@ -38,6 +40,12 @@ public class Reciver extends BroadcastReceiver {
 		}
 		else if(intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")){
 			Toast.makeText(context, "SMS Recived capture", Toast.LENGTH_SHORT).show();
+			ContentValues values = new ContentValues();
+			values.put("content","kuk");
+			 values.put("datetime", "YYYY-MM-DD HH:MM:SS");
+			  values.put("category", "Telefoni");
+			  
+			 context.getContentResolver().insert(DatabaseProvider.CONTENT_URI, values);
 		}
 		else if(intent.getAction().equals("android.provider.Telephony.SMS_REJECTED")){
 			Toast.makeText(context, "SMS Rejected", Toast.LENGTH_SHORT).show();
@@ -68,5 +76,7 @@ public class Reciver extends BroadcastReceiver {
 			Toast.makeText(context, "Battery ok", Toast.LENGTH_SHORT).show();
 		}
 	}//end onRecive
+	
+	
 
 }//end Reciver.class
