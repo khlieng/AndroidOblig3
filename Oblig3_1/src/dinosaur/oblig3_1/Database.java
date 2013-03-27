@@ -20,9 +20,8 @@ public class Database extends SQLiteOpenHelper {
 				"details TEXT, " +
 				"datetime TEXT NOT NULL, " +
 				"category TEXT NOT NULL);");
-		
 		db.execSQL("CREATE TABLE settings (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				"index INTEGER NOT NULL);");
+				"setting INTEGER NOT NULL);");
 	}
 
 	@Override

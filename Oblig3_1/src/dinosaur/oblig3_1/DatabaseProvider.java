@@ -37,7 +37,7 @@ public class DatabaseProvider extends ContentProvider {
 		switch (uriType) {
 		case LOG:
 			return db.getWritableDatabase().delete("log", selection, selectionArgs);
-			
+		
 		case SETTINGS:
 			return db.getWritableDatabase().delete("settings", selection, selectionArgs);
 		}
@@ -84,6 +84,14 @@ public class DatabaseProvider extends ContentProvider {
 		case LOG_CATEGORY:
 			queryBuilder.setTables("log");
 			queryBuilder.appendWhere("category=\"" + uri.getLastPathSegment() +"\"");
+			break;
+			
+		case SETTINGS:
+			queryBuilder.setTables("settings");
+			break;
+			
+		default:
+			queryBuilder.setTables("log");
 			break;
 		}
 		Cursor cursor = queryBuilder.query(db.getReadableDatabase(), projection, selection, selectionArgs, null, null, sortOrder);
