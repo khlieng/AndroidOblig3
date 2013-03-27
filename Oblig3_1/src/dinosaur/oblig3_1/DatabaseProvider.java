@@ -32,8 +32,15 @@ public class DatabaseProvider extends ContentProvider {
 	}
 
 	@Override
-	public int delete(Uri arg0, String arg1, String[] arg2) {
-		// TODO Auto-generated method stub
+	public int delete(Uri uri, String selection, String[] selectionArgs) {
+		int uriType = uriMatcher.match(uri);
+		switch (uriType) {
+		case LOG:
+			return db.getWritableDatabase().delete("log", selection, selectionArgs);
+			
+		case SETTINGS:
+			return db.getWritableDatabase().delete("settings", selection, selectionArgs);
+		}
 		return 0;
 	}
 
@@ -67,14 +74,15 @@ public class DatabaseProvider extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-		queryBuilder.setTables("log, settings");
 		int uriType = uriMatcher.match(uri);
 		switch (uriType) {
 		case LOG_ENTRY_ID:
+			queryBuilder.setTables("log");
 			queryBuilder.appendWhere("_id=" + uri.getLastPathSegment());
 			break;
 			
 		case LOG_CATEGORY:
+			queryBuilder.setTables("log");
 			queryBuilder.appendWhere("category=\"" + uri.getLastPathSegment() +"\"");
 			break;
 		}
