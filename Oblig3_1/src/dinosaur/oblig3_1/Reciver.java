@@ -17,8 +17,8 @@ import android.widget.Toast;
 public class Reciver extends BroadcastReceiver {
 
 
-	Date d = new Date();
-	String s = d.toGMTString();
+	private Date d = new Date();
+	private String s = d.toGMTString();
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -57,7 +57,10 @@ public class Reciver extends BroadcastReceiver {
 		}
 		else if(intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")){		
 			Toast.makeText(context, "SMS Recived capture", Toast.LENGTH_SHORT).show();
-			add("SMS Recived", s, "Telefoni", context);
+			Object message[] = (Object[])intent.getExtras().get("pdus");
+			android.telephony.SmsMessage sms = android.telephony.SmsMessage.createFromPdu((byte[])message[0]);
+			String details = sms.getOriginatingAddress();
+			add("SMS Recived", s, "Telefoni", context, details);
 			
 		}
 		else if(intent.getAction().equals("android.provider.Telephony.SMS_REJECTED")){
@@ -98,12 +101,41 @@ public class Reciver extends BroadcastReceiver {
 		}
 	}//end onRecive
 	
-	public void add(String msg, String date, String catagory, Context context ){
+	/**
+	 * 
+	 * @param msg
+	 * @param date
+	 * @param catagory
+	 * @param context
+	 */
+	public void add(String msg, String date, String catagory, Context context){
+		
+		/* ContentValues values = new ContentValues();
+		 values.put("content", msg );
+		 values.put("datetime", date);
+		 values.put("category", catagory);
+	
+		  
+		 context.getContentResolver().insert(DatabaseProvider.CONTENT_URI, values);
+		 context.getContentResolver().notifyChange(DatabaseProvider.CONTENT_URI, null);*/
+		add(msg, date, catagory, context, "");
+	}
+	
+	/**
+	 * 
+	 * @param msg
+	 * @param date
+	 * @param catagory
+	 * @param context
+	 * @param details
+	 */
+	public void add(String msg, String date, String catagory, Context context,String details){	
 		
 		 ContentValues values = new ContentValues();
 		 values.put("content", msg );
 		 values.put("datetime", date);
 		 values.put("category", catagory);
+		 values.put("details", details);
 		  
 		 context.getContentResolver().insert(DatabaseProvider.CONTENT_URI, values);
 		 context.getContentResolver().notifyChange(DatabaseProvider.CONTENT_URI, null);
