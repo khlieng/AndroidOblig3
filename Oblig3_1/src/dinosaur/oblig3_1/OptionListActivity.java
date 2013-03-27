@@ -2,10 +2,13 @@ package dinosaur.oblig3_1;
 
 import java.util.ArrayList;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,13 +25,15 @@ public class OptionListActivity extends ListActivity {
 			R.array.category_network,
 			R.array.category_div
 	};
+	
+	private boolean[] data = new boolean[5];
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_option_list);
 		
-		int categoryIndex = getIntent().getExtras().getInt(MainActivity.CATEGORY_INDEX);
+		final int categoryIndex = getIntent().getExtras().getInt(MainActivity.CATEGORY_INDEX);
 		String category = getResources().getStringArray(R.array.categories)[categoryIndex];
 		
 		setTitle("Kategori - " + category);
@@ -36,18 +41,51 @@ public class OptionListActivity extends ListActivity {
 		String[] options = getResources().getStringArray(CATEGORIES[categoryIndex]);
 		getListView().setAdapter(new OptionAdapter(this, R.layout.row_option, options));
 		
+		boolean[] tempData = getData();
+		for (int i = categoryIndex * 5, j = 0; i < categoryIndex * 5 + 5; i++, j++) {
+			data[j] = tempData[i];
+		}
+		
 		Button buttonSave = (Button)findViewById(R.id.button_save);
 		buttonSave.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				// Skyv innstillinger til DB her
+				boolean[] tempData = getData();
+				getContentResolver().delete(DatabaseProvider.SETTINGS_URI, null, null);
+
+				for (int i = categoryIndex * 5, j = 0; i < categoryIndex * 5 + 5; i++, j++) {
+					tempData[i] = data[j];
+				}
+				
+				for (int i = 0; i < 15; i++) {
+					if (tempData[i]) {
+						ContentValues values = new ContentValues();
+						values.put("setting", i);
+						getContentResolver().insert(DatabaseProvider.SETTINGS_URI, values);
+					}
+				}
 				finish();
 			}			
 		});
 	}
+	
+	private boolean[] getData() {
+		Cursor result = getContentResolver().query(DatabaseProvider.SETTINGS_URI, new String[]{ "setting" }, null, null, null);
+		boolean settings[] = new boolean[15];
+		for (int i = 0; i < 15; i++) {
+			settings[i] = false;
+		}
+		if (result.getCount() > 0) {
+			result.moveToFirst();
+			do {
+				settings[result.getInt(0)] = true;
+			} while (result.moveToNext());
+		}
+		return settings;
+	}
 
 	private void foo(String s) {
-		Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, s, Toast.LENGTH_LONG).show();
 	}
 	
 	@Override
@@ -73,10 +111,12 @@ public class OptionListActivity extends ListActivity {
             dt.setText(entries[position]);
             
             final CheckBox cb = (CheckBox)v.findViewById(R.id.checkbox);
+            cb.setChecked(data[position]);
             cb.setOnClickListener(new OnClickListener() {
     			@Override
     			public void onClick(View arg0) {
     				foo(entries[position] + " " + cb.isChecked());
+    				data[position] = cb.isChecked();
     			}			
     		});
             
