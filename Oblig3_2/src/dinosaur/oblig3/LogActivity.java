@@ -109,6 +109,11 @@ public class LogActivity extends ListActivity {
             status.setFocusableInTouchMode(false);
             status.setText(entries.get(position).getContent());
             
+            TextView details = (TextView)v.findViewById(R.id.details);
+            details.setFocusable(false);
+            details.setFocusableInTouchMode(false);
+            details.setText(entries.get(position).getDetails());
+            
             return v;
 		}
 	}

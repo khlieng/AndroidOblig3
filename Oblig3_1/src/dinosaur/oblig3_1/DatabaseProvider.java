@@ -15,8 +15,11 @@ public class DatabaseProvider extends ContentProvider {
 	public static final int LOG = 1;
 	public static final int LOG_ENTRY_ID = 2;
 	public static final int LOG_CATEGORY = 3;
+	public static final int SETTINGS = 4;
 	private static final String LOG_BASE_PATH = "log";
+	private static final String SETTINGS_BASE_PATH = "settings";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + LOG_BASE_PATH);
+	public static final Uri SETTINGS_URI = Uri.parse("content://" + AUTHORITY + "/" + SETTINGS_BASE_PATH);
 	public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/oblig3";
 	public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/oblig3";
 	
@@ -25,6 +28,7 @@ public class DatabaseProvider extends ContentProvider {
 		uriMatcher.addURI(AUTHORITY, LOG_BASE_PATH, LOG);
 		uriMatcher.addURI(AUTHORITY, LOG_BASE_PATH + "/#", LOG_ENTRY_ID);
 		uriMatcher.addURI(AUTHORITY, LOG_BASE_PATH + "/category/*", LOG_CATEGORY);
+		uriMatcher.addURI(AUTHORITY, SETTINGS_BASE_PATH, SETTINGS);
 	}
 
 	@Override
@@ -41,7 +45,16 @@ public class DatabaseProvider extends ContentProvider {
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		db.getWritableDatabase().insert("log", "", values);
+		int uriType = uriMatcher.match(uri);
+		switch (uriType) {
+		case LOG:
+			db.getWritableDatabase().insert("log", "", values);
+			break;
+			
+		case SETTINGS:
+			db.getWritableDatabase().insert("settings", "", values);
+			break;
+		}
 		return uri;
 	}
 
@@ -54,7 +67,7 @@ public class DatabaseProvider extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-		queryBuilder.setTables("log");
+		queryBuilder.setTables("log, settings");
 		int uriType = uriMatcher.match(uri);
 		switch (uriType) {
 		case LOG_ENTRY_ID:

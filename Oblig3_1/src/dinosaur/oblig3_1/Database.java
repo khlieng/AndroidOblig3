@@ -20,11 +20,15 @@ public class Database extends SQLiteOpenHelper {
 				"details TEXT, " +
 				"datetime TEXT NOT NULL, " +
 				"category TEXT NOT NULL);");
+		
+		db.execSQL("CREATE TABLE settings (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"index INTEGER NOT NULL);");
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXISTS log");
+		db.execSQL("DROP TABLE IF EXISTS settings");
 		onCreate(db);
 	}
 
