@@ -26,6 +26,7 @@ public class OptionListActivity extends ListActivity {
 			R.array.category_div
 	};
 	
+	private int categoryIndex;
 	private boolean[] data = new boolean[5];
 
 	@Override
@@ -33,7 +34,7 @@ public class OptionListActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_option_list);
 		
-		final int categoryIndex = getIntent().getExtras().getInt(MainActivity.CATEGORY_INDEX);
+		categoryIndex = getIntent().getExtras().getInt(MainActivity.CATEGORY_INDEX);
 		String category = getResources().getStringArray(R.array.categories)[categoryIndex];
 		
 		setTitle("Kategori - " + category);
@@ -41,29 +42,13 @@ public class OptionListActivity extends ListActivity {
 		String[] options = getResources().getStringArray(CATEGORIES[categoryIndex]);
 		getListView().setAdapter(new OptionAdapter(this, R.layout.row_option, options));
 		
-		boolean[] tempData = getData();
-		for (int i = categoryIndex * 5, j = 0; i < categoryIndex * 5 + 5; i++, j++) {
-			data[j] = tempData[i];
-		}
+		loadSettings();
 		
 		Button buttonSave = (Button)findViewById(R.id.button_save);
 		buttonSave.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				boolean[] tempData = getData();
-				getContentResolver().delete(DatabaseProvider.SETTINGS_URI, null, null);
-
-				for (int i = categoryIndex * 5, j = 0; i < categoryIndex * 5 + 5; i++, j++) {
-					tempData[i] = data[j];
-				}
-				
-				for (int i = 0; i < 15; i++) {
-					if (tempData[i]) {
-						ContentValues values = new ContentValues();
-						values.put("setting", i);
-						getContentResolver().insert(DatabaseProvider.SETTINGS_URI, values);
-					}
-				}
+				pushToDB();
 				finish();
 			}			
 		});
@@ -83,9 +68,29 @@ public class OptionListActivity extends ListActivity {
 		}
 		return settings;
 	}
+	
+	private void loadSettings() {
+		boolean[] tempData = getData();
+		for (int i = categoryIndex * 5, j = 0; i < categoryIndex * 5 + 5; i++, j++) {
+			data[j] = tempData[i];
+		}
+	}
+	
+	private void pushToDB() {
+		boolean[] tempData = getData();
+		getContentResolver().delete(DatabaseProvider.SETTINGS_URI, null, null);
 
-	private void foo(String s) {
-		Toast.makeText(this, s, Toast.LENGTH_LONG).show();
+		for (int i = categoryIndex * 5, j = 0; i < categoryIndex * 5 + 5; i++, j++) {
+			tempData[i] = data[j];
+		}
+		
+		for (int i = 0; i < 15; i++) {
+			if (tempData[i]) {
+				ContentValues values = new ContentValues();
+				values.put("setting", i);
+				getContentResolver().insert(DatabaseProvider.SETTINGS_URI, values);
+			}
+		}
 	}
 	
 	@Override
@@ -115,7 +120,6 @@ public class OptionListActivity extends ListActivity {
             cb.setOnClickListener(new OnClickListener() {
     			@Override
     			public void onClick(View arg0) {
-    				foo(entries[position] + " " + cb.isChecked());
     				data[position] = cb.isChecked();
     			}			
     		});
