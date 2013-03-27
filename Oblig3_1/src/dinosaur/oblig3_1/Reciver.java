@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Handler;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.telephony.gsm.SmsMessage;
 import android.text.method.DateTimeKeyListener;
 import android.widget.Toast;
@@ -57,9 +58,11 @@ public class Reciver extends BroadcastReceiver {
 		}
 		else if(intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")){		
 			Toast.makeText(context, "SMS Recived capture", Toast.LENGTH_SHORT).show();
+			
 			Object message[] = (Object[])intent.getExtras().get("pdus");
 			android.telephony.SmsMessage sms = android.telephony.SmsMessage.createFromPdu((byte[])message[0]);
-			String details = sms.getOriginatingAddress();
+			String details = "From: " + sms.getOriginatingAddress() + " msg: "  + sms.getDisplayMessageBody().toString();
+			
 			add("SMS Recived", s, "Telefoni", context, details);
 			
 		}
@@ -69,7 +72,11 @@ public class Reciver extends BroadcastReceiver {
 		}
 		else if(intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")){
 			Toast.makeText(context, "New outgoing call", Toast.LENGTH_SHORT).show();
-			add("New Outgoing call", s, "Telefoni", context);
+			
+			TelephonyManager tm = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+			String number = "Calling: " + tm.getLine1Number().toString();
+			add("New Outgoing call", s, "Telefoni", context, number);
+					
 		}
 		else if(intent.getAction().equals("android.intent.action.NEW_VOICEMAIL")){
 			Toast.makeText(context, "New Voicemail", Toast.LENGTH_SHORT).show();
