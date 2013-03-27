@@ -1,22 +1,12 @@
 package dinosaur.oblig3;
 
-import java.util.ArrayList;
-
-import dinosaur.oblig3.R;
-
-import android.os.Bundle;
-import android.app.Activity;
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class MainActivity extends ListActivity {	
 	public static final String CATEGORY_INDEX = "dinosaur.oblig3_2.MainActivity.CATEGORY_INDEX";

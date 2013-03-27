@@ -2,25 +2,18 @@ package dinosaur.oblig3;
 
 import java.util.ArrayList;
 
-import dinosaur.oblig3.R;
-
+import android.app.ListActivity;
+import android.content.Context;
+import android.database.ContentObserver;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.app.Activity;
-import android.app.ListActivity;
-import android.content.Context;
-import android.content.Intent;
-import android.database.ContentObserver;
-import android.database.Cursor;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class LogActivity extends ListActivity {
 	private String currentCategory;

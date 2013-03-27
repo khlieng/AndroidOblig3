@@ -7,16 +7,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
-import android.os.Handler;
-import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
-import android.telephony.gsm.SmsMessage;
-import android.text.method.DateTimeKeyListener;
 import android.widget.Toast;
 
 public class Reciver extends BroadcastReceiver {
+	private int[] CATEGORIES = new int[] {
+			R.array.category_telephony,
+			R.array.category_network,
+			R.array.category_div
+	};
 
 	//Date settings
 	private Date d = new Date();
@@ -27,91 +26,94 @@ public class Reciver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
 		
-		
-		
 		boolean[] array = getData(context);
 		
+		String[] options = context.getResources().getStringArray(CATEGORIES[1]);
 		
 		/**
 		 * Nettwork monitor state
 		 */
 		if(intent.getAction().equals("android.net.wifi.STATE_CHANGE") && array[5]){
-			Toast.makeText(context, "Wifi state changed", Toast.LENGTH_SHORT).show();
-			add("Wifi State changed", s, "Nettverk", context);
+			Toast.makeText(context, options[0], Toast.LENGTH_SHORT).show();
+			add(options[0], s, "Nettverk", context);
 		}
 		else if(intent.getAction().equals("android.net.wifi.NETWORK_IDS_CHANGED")&& array[6]){
-			Toast.makeText(context, "Wifi network ids changed", Toast.LENGTH_SHORT).show();
-			add("Wifi Netword IDS changed", s, "Nettverk", context);
+			Toast.makeText(context, options[1], Toast.LENGTH_SHORT).show();
+			add(options[1], s, "Nettverk", context);
 		}
 		else if(intent.getAction().equals("android.net.wifi.supplicant.CONNECTION_CHANGE")&& array[7]){
-			Toast.makeText(context, "Connection changed", Toast.LENGTH_SHORT).show();
-			add("Wifi Connection Changed", s, "Nettverk", context);
+			Toast.makeText(context, options[2], Toast.LENGTH_SHORT).show();
+			add(options[2], s, "Nettverk", context);
 		}
 		else if(intent.getAction().equals("android.bluetooth.adapter.action.STATE_CHANGED")&& array[8]){
-			Toast.makeText(context, "Bluetooth state changed", Toast.LENGTH_SHORT).show();
-			add("Bluethooth state changed", s, "Nettverk", context);
+			Toast.makeText(context, options[3], Toast.LENGTH_SHORT).show();
+			add(options[3], s, "Nettverk", context);
 		}
 		else if(intent.getAction().equals("android.bluetooth.device.action.FOUND")&& array[9]){
-			Toast.makeText(context, "Bluetooth found", Toast.LENGTH_SHORT).show();
-			add("Bluethooth device found", s, "Nettverk", context);
+			Toast.makeText(context, options[4], Toast.LENGTH_SHORT).show();
+			add(options[4], s, "Nettverk", context);
 		}
+		
+		options = context.getResources().getStringArray(CATEGORIES[0]);
 		
 		/**
 		 * Telefoni monitor state
 		 */
 		if(intent.getAction().equals("android.provider.Telephony.SIM_FULL")&& array[0]){
-			Toast.makeText(context, "Sim card full", Toast.LENGTH_SHORT).show();
-			add("Simcard full", s, "Telefoni", context);
+			Toast.makeText(context, options[0], Toast.LENGTH_SHORT).show();
+			add(options[0], s, "Telefoni", context);
 		}
 		else if(intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")&& array[1]){		
-			Toast.makeText(context, "SMS Recived capture", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, options[1], Toast.LENGTH_SHORT).show();
 			
 			Object message[] = (Object[])intent.getExtras().get("pdus");
 			android.telephony.SmsMessage sms = android.telephony.SmsMessage.createFromPdu((byte[])message[0]);
-			String details = "From: " + sms.getOriginatingAddress() + " msg: "  + sms.getDisplayMessageBody().toString();
+			String details = "Fra: " + sms.getOriginatingAddress() + " SMS: "  + sms.getDisplayMessageBody().toString();
 			
-			add("SMS Recived", s, "Telefoni", context, details);
+			add(options[1], s, "Telefoni", context, details);
 			
 		}
 		else if(intent.getAction().equals("android.provider.Telephony.SMS_REJECTED")&& array[2]){
-			Toast.makeText(context, "SMS Rejected", Toast.LENGTH_SHORT).show();
-			add("SMS Rejected", s, "Telefoni", context);
+			Toast.makeText(context, options[2], Toast.LENGTH_SHORT).show();
+			add(options[2], s, "Telefoni", context);
 		}
 		else if(intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")&& array[3]){
-			Toast.makeText(context, "New outgoing call", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, options[3], Toast.LENGTH_SHORT).show();
 			
 			TelephonyManager tm = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-			String number = "Calling: " + tm.getLine1Number().toString();
-			add("New Outgoing call", s, "Telefoni", context, number);
+			String number = "Fra: " + tm.getLine1Number().toString();
+			add(options[3], s, "Telefoni", context, number);
 					
 		}
 		else if(intent.getAction().equals("android.intent.action.NEW_VOICEMAIL")&& array[4]){
-			Toast.makeText(context, "New Voicemail", Toast.LENGTH_SHORT).show();
-			add("New Voicemail", s, "Telefoni", context);
+			Toast.makeText(context, options[4], Toast.LENGTH_SHORT).show();
+			add(options[4], s, "Telefoni", context);
 		}
+		
+		options = context.getResources().getStringArray(CATEGORIES[2]);
 		
 		/**
 		 * Div instillinger
 		 */
 		if(intent.getAction().equals("android.intent.action.HEADSET_PLUG")&& array[10]){
-			Toast.makeText(context, "Headset pluged", Toast.LENGTH_SHORT).show();
-			add("Headset plug", s, "Diverse", context);
+			Toast.makeText(context, options[0], Toast.LENGTH_SHORT).show();
+			add(options[0], s, "Diverse", context);
 		}
 		else if(intent.getAction().equals("android.intent.action.BOOT_COMPLETED")&& array[11]){
-			Toast.makeText(context, "Boot Completed", Toast.LENGTH_SHORT).show();
-			add("Boot completed", s, "Diverse", context);
+			Toast.makeText(context, options[1], Toast.LENGTH_SHORT).show();
+			add(options[1], s, "Diverse", context);
 		}
 		else if(intent.getAction().equals("android.intent.action.AIRPLANE_MODE")&& array[12]){
-			Toast.makeText(context, "Airplane mode changed", Toast.LENGTH_SHORT).show();
-			add("Airplane mode changed", s, "Diverse", context);
+			Toast.makeText(context, options[2], Toast.LENGTH_SHORT).show();
+			add(options[2], s, "Diverse", context);
 		}
 		else if(intent.getAction().equals("android.intent.action.WALLPAPER_CHANGED")&& array[13]){
-			Toast.makeText(context, "Wallpaper changed", Toast.LENGTH_SHORT).show();
-			add("Wallpaper changed", s, "Diverse", context);
+			Toast.makeText(context, options[3], Toast.LENGTH_SHORT).show();
+			add(options[3], s, "Diverse", context);
 		}
 		else if(intent.getAction().equals("android.intent.action.BATTERY_OKAY")&& array[14]){
-			Toast.makeText(context, "Battery ok", Toast.LENGTH_SHORT).show();
-			add("Battery  OKEY", s, "Diverse", context);
+			Toast.makeText(context, options[4], Toast.LENGTH_SHORT).show();
+			add(options[4], s, "Diverse", context);
 		}
 	}//end onRecive
 	
